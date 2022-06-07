@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Linq;
 
-namespace Monomino.Classes;
+namespace BinksFarm.Classes;
 
 public class HighlightListMenu
 {

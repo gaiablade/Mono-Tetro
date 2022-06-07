@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Monomino.Classes;
+namespace BinksFarm.Classes;
 
 public class ProgressAnimation
 {

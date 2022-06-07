@@ -1,4 +1,4 @@
-﻿namespace Monomino.Constants;
+﻿namespace BinksFarm.Constants;
 
 public class OptionsMenuStrings
 {

@@ -1,6 +1,6 @@
-﻿using Monomino.Enums;
+﻿using BinksFarm.Enums;
 
-namespace Monomino.Classes;
+namespace BinksFarm.Classes;
 
 public class Tile
 {

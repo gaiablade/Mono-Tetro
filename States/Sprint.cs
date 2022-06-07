@@ -1,10 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoCustoms;
-using Monomino.Constants;
-using Monomino.Enums;
+using BinksFarm.Constants;
+using BinksFarm.Enums;
 
-namespace Monomino.States;
+namespace BinksFarm.States;
 
 public class Sprint : SinglePlayerGameMode
 {

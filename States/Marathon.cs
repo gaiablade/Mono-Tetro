@@ -1,10 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Monomino.Constants;
-using Monomino.Enums;
+using BinksFarm.Constants;
+using BinksFarm.Enums;
 using MonoCustoms;
 
-namespace Monomino.States;
+namespace BinksFarm.States;
 
 public class Marathon : SinglePlayerGameMode
 {

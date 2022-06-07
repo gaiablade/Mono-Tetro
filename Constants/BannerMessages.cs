@@ -1,4 +1,4 @@
-﻿namespace Monomino.Constants;
+﻿namespace BinksFarm.Constants;
 
 public static class BannerMessages
 {

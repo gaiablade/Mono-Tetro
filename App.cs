@@ -1,16 +1,16 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Monomino.Classes;
-using Monomino.Constants;
-using Monomino.Interfaces;
-using Monomino.States;
+using BinksFarm.Classes;
+using BinksFarm.Constants;
+using BinksFarm.Interfaces;
+using BinksFarm.States;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 
-namespace Monomino;
+namespace BinksFarm;
 
 public class App : Microsoft.Xna.Framework.Game
 {

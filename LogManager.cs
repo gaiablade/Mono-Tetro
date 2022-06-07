@@ -2,7 +2,7 @@
 using System;
 using System.IO;
 
-namespace Monomino;
+namespace BinksFarm;
 
 public class LogManager
 {
@@ -14,7 +14,7 @@ public class LogManager
             Directory.CreateDirectory(".\\logs");
         }
         var dateTime = DateTime.Now;
-        _filename = $"logs\\Monomino [{((DateTimeOffset)dateTime).ToUnixTimeSeconds()}].txt";
+        _filename = $"logs\\BinksFarm [{((DateTimeOffset)dateTime).ToUnixTimeSeconds()}].txt";
     }
     public static string Log(string message, string type = "LOG")
     {

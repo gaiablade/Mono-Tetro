@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonoCustoms;
 
-namespace Monomino.Interfaces;
+namespace BinksFarm.Interfaces;
 
 public interface ITransition
 {

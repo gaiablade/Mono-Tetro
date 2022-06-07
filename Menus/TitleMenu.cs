@@ -1,9 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Monomino.Classes;
-using Monomino.Debug;
+using BinksFarm.Classes;
+using BinksFarm.Debug;
 
-namespace Monomino.Menus;
+namespace BinksFarm.Menus;
 
 public class TitleMenu : HighlightListMenu
 {

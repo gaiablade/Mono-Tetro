@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 
-namespace Monomino.Classes;
+namespace BinksFarm.Classes;
 
 public class InputManager
 {

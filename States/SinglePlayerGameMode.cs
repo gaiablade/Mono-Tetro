@@ -2,12 +2,12 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoCustoms;
-using Monomino.Classes;
-using Monomino.Constants;
-using Monomino.Enums;
+using BinksFarm.Classes;
+using BinksFarm.Constants;
+using BinksFarm.Enums;
 using System;
 
-namespace Monomino.States;
+namespace BinksFarm.States;
 
 public struct SinglePlayerGameConfig
 {

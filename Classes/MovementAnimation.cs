@@ -1,7 +1,7 @@
 ﻿using System;
 using MonoCustoms;
 
-namespace Monomino.Classes;
+namespace BinksFarm.Classes;
 
 public class MovementAnimation
 {

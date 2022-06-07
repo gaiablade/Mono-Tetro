@@ -1,12 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Monomino.Enums;
-using Monomino.Interfaces;
+using BinksFarm.Enums;
+using BinksFarm.Interfaces;
 using System;
 using MonoCustoms;
 using Microsoft.Xna.Framework.Input;
 
-namespace Monomino.Classes;
+namespace BinksFarm.Classes;
 
 public abstract class UserInputState : IState
 {

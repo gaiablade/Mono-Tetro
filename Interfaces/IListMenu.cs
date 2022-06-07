@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 
-namespace Monomino.Interfaces;
+namespace BinksFarm.Interfaces;
 
 public interface IListMenu
 {

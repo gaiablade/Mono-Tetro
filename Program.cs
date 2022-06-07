@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Monomino;
+namespace BinksFarm;
 
 public static class Program
 {

@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Monomino.Enums;
+using BinksFarm.Enums;
 
-namespace Monomino.Interfaces;
+namespace BinksFarm.Interfaces;
 
 public interface IState
 {

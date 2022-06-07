@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework.Input;
-using Monomino.Enums;
+using BinksFarm.Enums;
 using System.Collections.Generic;
 
-namespace Monomino.Constants;
+namespace BinksFarm.Constants;
 
 public static class KeyBindingPresets
 {

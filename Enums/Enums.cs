@@ -1,4 +1,4 @@
-﻿namespace Monomino.Enums;
+﻿namespace BinksFarm.Enums;
 
 public enum DisplayMode : byte
 {

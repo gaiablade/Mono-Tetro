@@ -1,11 +1,11 @@
 ﻿using Microsoft.Xna.Framework.Input;
-using Monomino.Constants;
-using Monomino.Enums;
+using BinksFarm.Constants;
+using BinksFarm.Enums;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 
-namespace Monomino.Classes;
+namespace BinksFarm.Classes;
 
 public class Configuration
 {

@@ -4,10 +4,10 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoCustoms;
-using Monomino.Enums;
-using Monomino.Constants;
+using BinksFarm.Enums;
+using BinksFarm.Constants;
 
-namespace Monomino.Classes;
+namespace BinksFarm.Classes;
 
 public class Tetromino
 {

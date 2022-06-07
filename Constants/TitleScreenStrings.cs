@@ -1,4 +1,4 @@
-﻿namespace Monomino.Constants;
+﻿namespace BinksFarm.Constants;
 
 public static class TitleScreenStrings
 {
@@ -14,6 +14,6 @@ public static class TitleScreenStrings
     public const string OptionsDescription = "Configure game options and key bindings!";
     public const string ExitDescription = "Exit to the desktop";
 
-    public const string GameTitle = "monomino";
+    public const string GameTitle = "BinksFarm";
     public const string URL = "https://gaiablade.com";
 }

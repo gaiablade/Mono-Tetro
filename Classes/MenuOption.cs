@@ -1,4 +1,4 @@
-﻿namespace Monomino.Classes;
+﻿namespace BinksFarm.Classes;
 
 public class MenuOption
 {

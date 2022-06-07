@@ -1,10 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoCustoms;
-using Monomino.Interfaces;
+using BinksFarm.Interfaces;
 using System;
 
-namespace Monomino.Classes;
+namespace BinksFarm.Classes;
 
 public class FadeInTransition : ITransition
 {

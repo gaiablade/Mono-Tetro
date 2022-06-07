@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Monomino", "Monomino.csproj", "{01ECD20B-2487-4891-9B38-B614EB01C297}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BinksFarm", "BinksFarm.csproj", "{01ECD20B-2487-4891-9B38-B614EB01C297}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoCustoms", "..\random-rpg\MonoCustoms\MonoCustoms.csproj", "{C33E2319-48E2-4353-A4B6-5B84E7184DAC}"
 EndProject
