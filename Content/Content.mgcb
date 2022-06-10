@@ -20,27 +20,6 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/exo2.spritefont
 
-#begin Fonts/larabiefont.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:Fonts/larabiefont.spritefont
-
-#begin Fonts/rimouski.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:Fonts/rimouski.spritefont
-
-#begin Fonts/Roboto-Regular.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:Fonts/Roboto-Regular.spritefont
-
 #begin Textures/bg_01.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -100,18 +79,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/dots_2_3.jpg;Textures/bg_06.jpg
-
-#begin Textures/kirby.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/kirby.png
 
 #begin Textures/menu_pointer_30x27.png
 /importer:TextureImporter

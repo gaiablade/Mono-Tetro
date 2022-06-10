@@ -10,5 +10,4 @@ public static class Resource
     public const string BG06 = "Textures/bg_06";
     public const string FT01 = "Fonts/exo2";
     public const string MP01 = "Textures/menu_pointer_30x27";
-    public const string KIRBY = "Textures/kirby";
 }

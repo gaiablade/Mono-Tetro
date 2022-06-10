@@ -66,7 +66,6 @@ public abstract class SinglePlayerGameMode : UserInputState
     protected readonly Rectangle WindowSize;
     protected readonly Texture2D Background;
     protected readonly SpriteFont Font;
-    protected readonly Texture2D KirbyTexture;
     protected readonly int GridXO, GridYO;
     protected readonly int BorderXO, BorderYO;
     protected readonly Texture2D texture;
@@ -84,7 +83,6 @@ public abstract class SinglePlayerGameMode : UserInputState
     protected const double RotateTime = 100.0;
     protected const double LockTime = 2000;
     protected const double BannerTime = 2000;
-    protected const double KirbyFrameDuration = 100.0;
     protected float fromRT = 0;
     protected float toRT = 0;
     protected MovementAnimation hMoveAnim;
@@ -92,7 +90,6 @@ public abstract class SinglePlayerGameMode : UserInputState
     protected MovementAnimation rMoveAnim;
     protected Timer lockSW = null;
     protected Timer bannerSW = null;
-    protected Timer kirbySW = null;
     protected Timer pauseSW = null;
     #endregion
 
@@ -144,7 +141,6 @@ public abstract class SinglePlayerGameMode : UserInputState
         texture = new Texture2D(this.GraphicsDevice, 1, 1);
         texture.SetData(new[] { Color.White });
         CurrentMinoTexture = Tetromino.TetrominoTextures[currentMino.Type];
-        KirbyTexture = LogManager.Load<Texture2D>(Resource.KIRBY, App.contentManager);
         Grid = DrawGridToDrawable(GraphicsDevice);
         Border = DrawBorderToDrawable(GraphicsDevice);
         NextPiecesCell = DrawNextPiecesGridToDrawable(GraphicsDevice);
@@ -168,7 +164,6 @@ public abstract class SinglePlayerGameMode : UserInputState
         gameTime = gt.TotalGameTime.TotalMilliseconds;
         lockSW = new Timer(gameTime);
         bannerSW = new Timer(gameTime);
-        kirbySW = new Timer(gameTime);
 
         // Pause Screen
         PauseMenu = new string[]
@@ -357,32 +352,6 @@ public abstract class SinglePlayerGameMode : UserInputState
             scale: App.Scale,
             rotation: (float)Rotation,
             origin: new Vector2(CurrentMinoTexture.Width / 2F, CurrentMinoTexture.Height / 2F));
-    }
-
-    protected virtual void DrawKirby(SpriteBatch spriteBatch)
-    {
-        if (kirbySW.GetElapsedMilliseconds(gameTime) < KirbyFrameDuration)
-        {
-            spriteBatch.Draw(KirbyTexture,
-                new Rectangle(BorderXO + Border.Width + 50, 400, KirbyTexture.Width / 2, KirbyTexture.Height),
-                new Rectangle(0, 0, KirbyTexture.Width / 2, KirbyTexture.Height),
-                Color.White);
-        }
-        else if (kirbySW.GetElapsedMilliseconds(gameTime) < KirbyFrameDuration * 2)
-        {
-            spriteBatch.Draw(KirbyTexture,
-                new Rectangle(BorderXO + Border.Width + 50, 400, KirbyTexture.Width / 2, KirbyTexture.Height),
-                new Rectangle(KirbyTexture.Width / 2, 0, KirbyTexture.Width / 2, KirbyTexture.Height),
-                Color.White);
-        }
-        else
-        {
-            kirbySW.Restart(gameTime);
-            spriteBatch.Draw(KirbyTexture,
-                new Rectangle(BorderXO + Border.Width + 50, 400, KirbyTexture.Width / 2, KirbyTexture.Height),
-                new Rectangle(0, 0, KirbyTexture.Width / 2, KirbyTexture.Height),
-                Color.White);
-        }
     }
 
     protected virtual void DrawPause(SpriteBatch spriteBatch)
