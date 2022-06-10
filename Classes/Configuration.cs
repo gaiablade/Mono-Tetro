@@ -4,6 +4,7 @@ using BinksFarm.Enums;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
+using MonoCustoms;
 
 namespace BinksFarm.Classes;
 
@@ -18,6 +19,13 @@ public class Configuration
     public int DAS { get; set; } = 8;
     public int ARR { get; set; } = 3;
     public bool IsFullscreen { get; set; } = false;
+    public int BackgroundDim { get; set; } = 0;
+
+    public void TogglePixelMovement() => UsePixelMovement = !UsePixelMovement;
+    public void TogglePixelRotation() => UsePixelRotation = !UsePixelRotation;
+    public void ToggleFullscreen() => IsFullscreen = !IsFullscreen;
+    public void IncrementBackgroundDim() => BackgroundDim = (BackgroundDim + 10).ClampLoop(0, 100);
+    public void DecrementBackgroundDim() => BackgroundDim = (BackgroundDim - 10).ClampLoop(0, 100);
 
     public Configuration()
     {

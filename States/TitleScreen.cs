@@ -13,7 +13,7 @@ namespace BinksFarm.States;
 public class TitleScreen : UserInputState
 {
     #region Data
-    private readonly List<(string Option, string Description)> Menu;
+    private readonly List<(string Option, string Description, Action Callback)> Menu;
     private readonly string VersionNumber;
     #endregion
 
@@ -47,14 +47,32 @@ public class TitleScreen : UserInputState
     public TitleScreen(GraphicsDevice graphicsDevice)
     {
         // Data
-        Menu = new List<(string Option, string Description)>
+        Menu = new List<(string Option, string Description, Action Callback)>
         {
-            (TitleScreenStrings.Marathon, TitleScreenStrings.MarathonDescription),
-            (TitleScreenStrings.Sprint, TitleScreenStrings.SprintDescription),
-            (TitleScreenStrings.Ultra, TitleScreenStrings.UltraDescription),
-            (TitleScreenStrings.Options, TitleScreenStrings.OptionsDescription),
-            (TitleScreenStrings.Exit, TitleScreenStrings.ExitDescription)
+            (TitleScreenStrings.Marathon, TitleScreenStrings.MarathonDescription, () => 
+            {
+                App.QueuedState = new Marathon(GraphicsDevice); 
+            }),
+            (TitleScreenStrings.Sprint, TitleScreenStrings.SprintDescription, () =>
+            {
+                App.QueuedState = new Sprint(GraphicsDevice);
+            }),
+            (TitleScreenStrings.Ultra, TitleScreenStrings.UltraDescription, () =>
+            {
+                App.QueuedState = new Ultra(GraphicsDevice);
+            }),
+            (TitleScreenStrings.Options, TitleScreenStrings.OptionsDescription, () =>
+            {
+                App.QueuedState = new OptionsMenu(GraphicsDevice);
+                App.OutTransition = new FadeOutTransition(GraphicsDevice, 300.0, App.TotalGameTime);
+                App.InTransition = new FadeInTransition(GraphicsDevice, 300.0, App.TotalGameTime);
+            }),
+            (TitleScreenStrings.Exit, TitleScreenStrings.ExitDescription, () =>
+            {
+                App.PopStack = 1;
+            })
         };
+
         VersionNumber = GetVersionNumber();
 
         // Rendering
@@ -204,22 +222,7 @@ public class TitleScreen : UserInputState
         }
         else if (GetFramesHeld(Keys.Enter) == 1)
         {
-            switch (hlp)
-            {
-                case 0: 
-                    App.QueuedState = new Marathon(GraphicsDevice); break;
-                case 1: 
-                    App.QueuedState = new Sprint(GraphicsDevice); break;
-                case 2:
-                    App.QueuedState = new Ultra(GraphicsDevice); break;
-                case 3:
-                    App.QueuedState = new OptionsMenu(GraphicsDevice);
-                    App.OutTransition = new FadeOutTransition(GraphicsDevice, 300.0, gameTime.TotalGameTime.TotalMilliseconds);
-                    App.InTransition = new FadeInTransition(GraphicsDevice, 300, gameTime.TotalGameTime.TotalMilliseconds);
-                    break;
-                case 4: 
-                    App.PopStack = 1; break;
-            }
+            Menu[hlp].Callback();
         }
 
         if (hlp != afterPosition)

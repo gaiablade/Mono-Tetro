@@ -31,6 +31,7 @@ public class App : Microsoft.Xna.Framework.Game
     public static bool UpdateResolution = false;
     public static bool UpdateFullscreen = false;
     public static double Scale = 1.0;
+    public static double TotalGameTime = 0.0;
 
     public App()
     {
@@ -76,7 +77,7 @@ public class App : Microsoft.Xna.Framework.Game
         CurrentState.Push(new TitleScreen(GraphicsDevice));
         InputManager.InitializeInputManager();
 
-        InTransition = new FadeInTransition(GraphicsDevice, 1000.0, new GameTime().TotalGameTime.TotalMilliseconds);
+        InTransition = new FadeInTransition(GraphicsDevice, 1000.0, App.TotalGameTime);
 
         base.Initialize();
     }
@@ -89,6 +90,7 @@ public class App : Microsoft.Xna.Framework.Game
     protected override void Update(GameTime gameTime)
     {
         InputManager.Update();
+        TotalGameTime = gameTime.TotalGameTime.TotalMilliseconds;
         CurrentState.Peek().Update(gameTime);
 
         if (OutTransition != null)
@@ -137,7 +139,10 @@ public class App : Microsoft.Xna.Framework.Game
                 for (int i = 0; i < PopStack; i++)
                     CurrentState.Pop();
                 if (CurrentState.Count == 0)
+                {
                     Exit();
+                    return;
+                }
                 PopStack = 0;
                 CurrentState.Peek().OnResume();
             }

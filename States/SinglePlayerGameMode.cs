@@ -25,8 +25,6 @@ public abstract class SinglePlayerGameMode : UserInputState
     protected readonly bool UsePixelRotation = App.GameConfig.UsePixelRotation;
     protected readonly int ARR = Math.Max(App.GameConfig.ARR, 1);
     protected readonly int DAS = Math.Max(App.GameConfig.DAS, 1);
-    protected readonly int TileWidth;
-    protected readonly int TileHeight;
     #endregion
 
     #region KeyBinding Fields
@@ -42,7 +40,7 @@ public abstract class SinglePlayerGameMode : UserInputState
 
     #region Constants
     // Constants
-    protected readonly int MinimumBagCapacity = 3;
+    protected readonly int MinimumBagCapacity = 5;
     #endregion
 
     #region Game Logic Fields
@@ -74,6 +72,8 @@ public abstract class SinglePlayerGameMode : UserInputState
     protected readonly Texture2D texture;
     protected readonly DrawableTexture Border;
     protected readonly DrawableTexture Grid;
+    protected readonly DrawableTexture NextPiecesCell;
+    protected readonly DrawableTexture HoldPieceCell;
     protected DrawableTexture CurrentMinoTexture;
     #endregion
 
@@ -122,9 +122,6 @@ public abstract class SinglePlayerGameMode : UserInputState
         this.Hold = gameConfig.KeyBindings[BindKeys.Hold];
         this.Pause = Keys.Escape;
 
-        TileWidth = Dimensions.TileWidth.Scale(App.Scale);
-        TileHeight = Dimensions.TileHeight.Scale(App.Scale);
-
         // Initialize key listener
         AddKeys(new Keys[]
         {
@@ -150,10 +147,12 @@ public abstract class SinglePlayerGameMode : UserInputState
         KirbyTexture = LogManager.Load<Texture2D>(Resource.KIRBY, App.contentManager);
         Grid = DrawGridToDrawable(GraphicsDevice);
         Border = DrawBorderToDrawable(GraphicsDevice);
-        GridXO = WindowSize.Width / 2 - Grid.Width.Scale(App.Scale) / 2;
-        GridYO = WindowSize.Height / 2 - Grid.Height.Scale(App.Scale) / 2;
-        BorderXO = GridXO - 5.Scale(App.Scale);
-        BorderYO = WindowSize.Height / 2 - Border.Height.Scale(App.Scale) / 2;
+        NextPiecesCell = DrawNextPiecesGridToDrawable(GraphicsDevice);
+        HoldPieceCell = DrawHoldPieceCellToDrawable(GraphicsDevice);
+        GridXO = Dimensions.DefaultWindowWidth / 2 - Grid.Width / 2;
+        GridYO = Dimensions.DefaultWindowHeight / 2 - Grid.Height / 2;
+        BorderXO = GridXO - 5;
+        BorderYO = Dimensions.DefaultWindowHeight / 2 - Border.Height / 2;
 
         // Animation
         HMoveTime = (1000.0 / 60.0) * (double)ARR; // in milliseconds
@@ -229,6 +228,35 @@ public abstract class SinglePlayerGameMode : UserInputState
         });
     }
 
+    protected DrawableTexture DrawNextPiecesGridToDrawable(GraphicsDevice graphicsDevice)
+    {
+        int w = Dimensions.TileWidth * 3;
+        int h = (Dimensions.TileHeight * 3) * 5;
+        return new DrawableTexture(GraphicsDevice, w + 10, h + 10, (sb) => 
+        {
+            sb.Draw(texture, new Rectangle(0, 0, w + 10, h + 10), Color.Black * 0.8F);
+            sb.Draw(texture, new Rectangle(0, 0, w + 10, 5), Color.White);
+            sb.Draw(texture, new Rectangle(0, 0, 5, h + 10), Color.White);
+            sb.Draw(texture, new Rectangle(0, h + 5, w + 10, 5), Color.White);
+            sb.Draw(texture, new Rectangle(w + 5, 0, 5, h + 10), Color.White);
+        });
+    }
+
+    protected DrawableTexture DrawHoldPieceCellToDrawable(GraphicsDevice graphicsDevice)
+    {
+        int w = Dimensions.TileWidth * 3 + 10;
+        int h = Dimensions.TileHeight * 3 + 10;
+
+        return new DrawableTexture(graphicsDevice, w, h, (sb) =>
+        {
+            sb.Draw(texture, new Rectangle(0, 0, w, h), Color.Black * 0.8F);
+            sb.Draw(texture, new Rectangle(0, 0, w , 5), Color.White);
+            sb.Draw(texture, new Rectangle(0, 0, 5, h), Color.White);
+            sb.Draw(texture, new Rectangle(0, h - 5, w, 5), Color.White);
+            sb.Draw(texture, new Rectangle(w - 5, 0, 5, h), Color.White);
+        });
+    }
+
     protected virtual void DrawCurrentPiece(SpriteBatch spriteBatch)
     {
         DrawGhostPiece(spriteBatch);
@@ -239,13 +267,13 @@ public abstract class SinglePlayerGameMode : UserInputState
 
         if (UsePixelMovement)
         {
-            x = GridXO + (hMoveAnim.GetX(gameTime) + CurrentMinoTexture.Width / 2).Scale(App.Scale);
-            y = GridYO + (vMoveAnim.GetY(gameTime) + CurrentMinoTexture.Height / 2).Scale(App.Scale);
+            x = GridXO + hMoveAnim.GetX(gameTime) + CurrentMinoTexture.Width / 2;
+            y = GridYO + vMoveAnim.GetY(gameTime) + CurrentMinoTexture.Height / 2;
         }
         else
         {
-            x = GridXO + (currentMino.X * Dimensions.TileWidth + CurrentMinoTexture.Width / 2).Scale(App.Scale);
-            y = GridYO + (currentMino.Y * Dimensions.TileHeight + CurrentMinoTexture.Height / 2).Scale(App.Scale);
+            x = GridXO + currentMino.X * Dimensions.TileWidth + CurrentMinoTexture.Width / 2;
+            y = GridYO + currentMino.Y * Dimensions.TileHeight + CurrentMinoTexture.Height / 2;
         }
 
         if (UsePixelRotation)
@@ -257,74 +285,78 @@ public abstract class SinglePlayerGameMode : UserInputState
             rotation = Math.PI / 2 * currentMino.Rotation;
         }
 
-        spriteBatch.Draw(texture: CurrentMinoTexture,
-                destinationRectangle: new Rectangle((int)x, (int)y, 
-                    CurrentMinoTexture.Width.Scale(App.Scale), CurrentMinoTexture.Height.Scale(App.Scale)),
-                color: Color.White,
-                rotation: (float)rotation,
-                sourceRectangle: CurrentMinoTexture.Bounds,
-                origin: new Vector2(CurrentMinoTexture.Width / 2F, CurrentMinoTexture.Height / 2F),
-                //origin: Vector2.Zero,
-                effects: SpriteEffects.None,
-                layerDepth: 0.0F);
+        spriteBatch.DrawScaled(CurrentMinoTexture, 
+            new Rectangle((int)x, (int)y, CurrentMinoTexture.Width, CurrentMinoTexture.Height), 
+            Color.White, 
+            scale: App.Scale, 
+            rotation: (float)rotation, 
+            origin: new Vector2(CurrentMinoTexture.Width / 2F, CurrentMinoTexture.Height / 2F));
     }
 
     protected virtual void DrawNextPieces(SpriteBatch spriteBatch)
     {
-        int y = GridYO;
+        var gx = BorderXO + Border.Width;
+        var gy = BorderYO;
+        spriteBatch.Draw(NextPiecesCell,
+            new Rectangle(gx.Scale(App.Scale), gy.Scale(App.Scale), NextPiecesCell.Width.Scale(App.Scale), NextPiecesCell.Height.Scale(App.Scale)),
+            Color.White);
+
+        var pad = 5;
         for (int i = 0; i < MinimumBagCapacity; i++)
         {
             var type = Bag.NextPieces.ToArray()[i];
             var texture = Tetromino.TetrominoTextures[type];
 
-            spriteBatch.Draw(texture, 
-                new Rectangle(BorderXO + Border.Width.Scale(App.Scale) + 10.Scale(App.Scale), 
-                    y, 
-                    texture.Width.Scale(App.Scale), 
-                    texture.Height.Scale(App.Scale)), 
-                Color.White);
+            var pw = texture.Width.Scale(0.68F);
+            var ph = texture.Height.Scale(0.68F);
+            var h = (NextPiecesCell.Height - 10) / 5;
+            var px = BorderXO + Border.Width + 5 + (NextPiecesCell.Width - 10) / 2 - pw / 2;
+            var py = BorderYO + 10 + h * i;
 
-            y += texture.Height.Scale(App.Scale) + 5.Scale(App.Scale);
+            spriteBatch.DrawScaled(texture, 
+                new Rectangle(px, py, pw, ph), 
+                Color.White, App.Scale);
         }
     }
 
     protected virtual void DrawHoldPiece(SpriteBatch spriteBatch)
     {
+        spriteBatch.DrawScaled(HoldPieceCell, 
+            new Rectangle(BorderXO - HoldPieceCell.Width, BorderYO, HoldPieceCell.Width, HoldPieceCell.Height), 
+            Color.White, App.Scale);
+
         if (holdPiece == null)
             return;
 
         var texture = Tetromino.TetrominoTextures[(TetrominoType)holdPiece];
-        spriteBatch.Draw(texture, 
-            new Rectangle(BorderXO - texture.Width.Scale(App.Scale) - 10.Scale(App.Scale), 
-                BorderYO, 
-                texture.Width.Scale(App.Scale), 
-                texture.Height.Scale(App.Scale)), 
-            Color.White);
+        var pw = texture.Width.Scale(0.68F);
+        var ph = texture.Height.Scale(0.68F);
+        var x = BorderXO - HoldPieceCell.Width + 5 + ((HoldPieceCell.Width - 5) / 2) - pw / 2;
+        var y = BorderYO + 5 + (HoldPieceCell.Height - 5) / 2 - ph / 2;
+        spriteBatch.DrawScaled(texture, 
+            new Rectangle(x, y, texture.Width.Scale(0.68F), texture.Height.Scale(0.68F)), 
+            Color.White, App.Scale);
     }
 
     protected virtual void DrawGhostPiece(SpriteBatch spriteBatch)
     {
         var YO = GetGhostPieceY();
         var pieceTexture = Tetromino.TetrominoTextures[currentMino.Type];
-        var X = GridXO + (currentMino.X * Dimensions.TileWidth + CurrentMinoTexture.Width / 2).Scale(App.Scale);
-        var Y = GridYO + (YO * Dimensions.TileHeight + pieceTexture.Height / 2F).Scale(App.Scale);
+        var X = GridXO + currentMino.X * Dimensions.TileWidth + CurrentMinoTexture.Width / 2;
+        var Y = GridYO + YO * Dimensions.TileHeight + pieceTexture.Height / 2F;
         var Rotation = currentMino.Rotation * Math.PI / 2;
 
         if (UsePixelMovement)
         {
-            X = GridXO + (int)hMoveAnim.GetX(gameTime).Scale(App.Scale) + CurrentMinoTexture.Width.Scale(App.Scale) / 2;
+            X = GridXO + (int)hMoveAnim.GetX(gameTime) + CurrentMinoTexture.Width / 2;
         }
 
-        spriteBatch.Draw(texture: CurrentMinoTexture,
-            destinationRectangle: new Rectangle((int)X, (int)Y, 
-                CurrentMinoTexture.Width.Scale(App.Scale), CurrentMinoTexture.Height.Scale(App.Scale)),
-            color: Color.White * 0.5F,
+        spriteBatch.DrawScaled(CurrentMinoTexture,
+            new Rectangle((int)X, (int)Y, CurrentMinoTexture.Width, CurrentMinoTexture.Height),
+            Color.White * 0.8F,
+            scale: App.Scale,
             rotation: (float)Rotation,
-            sourceRectangle: null,
-            origin: new Vector2(CurrentMinoTexture.Width / 2F, 
-            CurrentMinoTexture.Height / 2F),
-            effects: SpriteEffects.None,
-            layerDepth: 0.0F);
+            origin: new Vector2(CurrentMinoTexture.Width / 2F, CurrentMinoTexture.Height / 2F));
     }
 
     protected virtual void DrawKirby(SpriteBatch spriteBatch)
@@ -412,12 +444,17 @@ public abstract class SinglePlayerGameMode : UserInputState
         spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 
         DrawBackground(spriteBatch);
-        spriteBatch.Draw(Border, 
-            new Rectangle(BorderXO, BorderYO, Border.Width.Scale(App.Scale), Border.Height.Scale(App.Scale)), 
-            Color.White);
-        spriteBatch.Draw(Grid, 
-            new Rectangle(GridXO, GridYO, Grid.Width.Scale(App.Scale), Grid.Height.Scale(App.Scale)), 
-            Color.White * 0.5F);
+        spriteBatch.Draw(texture, GraphicsDevice.PresentationParameters.Bounds, 
+            Color.Black * ((float)App.GameConfig.BackgroundDim / 100.0F));
+        spriteBatch.DrawScaled(texture, 
+            new Rectangle(GridXO, GridYO, Grid.Width, Grid.Height), 
+            Color.Black * 0.75F, App.Scale);
+        spriteBatch.DrawScaled(Border, 
+            new Rectangle(BorderXO, BorderYO, Border.Width, Border.Height), 
+            Color.White, App.Scale);
+        spriteBatch.DrawScaled(Grid, 
+            new Rectangle(GridXO, GridYO, Grid.Width, Grid.Height), 
+            Color.White * 0.5F, App.Scale);
         DrawCurrentPiece(spriteBatch);
         DrawNextPieces(spriteBatch);
         DrawHoldPiece(spriteBatch);
@@ -433,21 +470,21 @@ public abstract class SinglePlayerGameMode : UserInputState
                 {
                     var colorTexture = Tetromino.ColorTextures[Field.tiles[y, x].color];
                     var color = Tetromino.Colors[Field.tiles[y, x].color];
-                    spriteBatch.Draw(colorTexture, 
-                        new Rectangle(GridXO + (Dimensions.TileWidth * x).Scale(App.Scale), 
-                            GridYO + (Dimensions.TileHeight * y).Scale(App.Scale), 
-                            TileWidth + 1, 
-                            TileHeight + 1), 
-                        Color.White);
+                    spriteBatch.DrawScaled(colorTexture, 
+                        new Rectangle(GridXO + Dimensions.TileWidth * x, 
+                            GridYO + Dimensions.TileHeight * y, 
+                            Dimensions.TileWidth + 1, 
+                            Dimensions.TileHeight + 1), 
+                        Color.White, App.Scale);
                 }
             }
         }
 
         if (bannerSW.GetElapsedMilliseconds(gameTime) < BannerTime)
         {
-            var strDim = Font.MeasureStringScaled(bannerMsg, 1.0F.Scale(App.Scale));
+            var strDim = Font.MeasureStringScaled(bannerMsg, 1F);
             spriteBatch.DrawStringOffset(Font, bannerMsg, Color.White,
-                new Vector2(BorderXO + Border.Width.Scale(App.Scale) / 2 - strDim.X / 2, BorderYO + 100), 
+                new Vector2(BorderXO + Border.Width / 2 - strDim.X / 2, BorderYO + 100).Scale(App.Scale), 
                 scale: 1.0F.Scale(App.Scale));
         }
 
@@ -767,14 +804,6 @@ public abstract class SinglePlayerGameMode : UserInputState
             return;
         }
 
-        // Game Won Screen
-        if (IsGameFinished())
-        {
-            if (GetFramesHeld(Keys.Enter) == 1)
-                App.PopStack = 1;
-            return;
-        }
-
         // Check for pause keypress
         if (GetFramesHeld(Pause) == 1)
         {
@@ -930,6 +959,9 @@ public abstract class SinglePlayerGameMode : UserInputState
                 holdPieceUsed = true;
             }
         }
+
+        if (IsGameFinished())
+            OnGameFinished();
     }
     #endregion
 

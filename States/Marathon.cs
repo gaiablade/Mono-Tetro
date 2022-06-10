@@ -13,7 +13,7 @@ public class Marathon : SinglePlayerGameMode
         {
             GameConfig = App.GameConfig,
             GraphicsDevice = graphicsDevice,
-            BackgroundTextureFilename = Resource.BG01,
+            BackgroundTextureFilename = Resource.BG04,
             FontFilename = Resource.FT01,
             MenuPointerTextureFilename = Resource.MP01
         })
@@ -36,24 +36,25 @@ public class Marathon : SinglePlayerGameMode
         var levelString = $"Level: {level}";
         var linesString = $"Lines: {linesCleared} / 150";
 
-        var dim1 = Font.MeasureStringScaled(scoreString, 0.75F.Scale(App.Scale));
-        var dim2 = Font.MeasureStringScaled(levelString, 0.75F.Scale(App.Scale));
-        var dim3 = Font.MeasureStringScaled(linesString, 0.75F.Scale(App.Scale));
+        var dim1 = Font.MeasureStringScaled(scoreString, 0.75F);
+        var dim2 = Font.MeasureStringScaled(levelString, 0.75F);
+        var dim3 = Font.MeasureStringScaled(linesString, 0.75F);
 
-        spriteBatch.Draw(texture, 
-            new Rectangle(BorderXO + Border.Width.Scale(App.Scale) + 110.Scale(App.Scale),
-            BorderYO - 10.Scale(App.Scale),
-            (int)(dim3.X + 50.Scale(App.Scale)), (int)(dim1.Y + dim2.Y + dim3.Y + 50.Scale(App.Scale))), 
-            Color.Black * 0.75F);
+        var tw = dim3.X + 50;
+        var th = dim1.Y + dim2.Y + dim3.Y + 50;
+        var tx = BorderXO + Border.Width + NextPiecesCell.Width + 10;
+        var ty = BorderYO;
+        spriteBatch.DrawScaled(texture,
+            new Rectangle(tx, ty, (int)tw, (int)th),
+            Color.Black * 0.75F,
+            App.Scale);
 
-        var pos = new Vector2(BorderXO + Border.Width.Scale(App.Scale) + 120.Scale(App.Scale), BorderYO);
-        spriteBatch.DrawStringOffset(Font, scoreString, Color.White, pos, scale: 0.75F.Scale(App.Scale));
-        pos = new Vector2(BorderXO + Border.Width.Scale(App.Scale) + 120.Scale(App.Scale), 
-            BorderYO + dim1.Y + 10.Scale(App.Scale));
-        spriteBatch.DrawStringOffset(Font, levelString, Color.White, pos, scale: 0.75F.Scale(App.Scale));
-        pos = new Vector2(BorderXO + Border.Width.Scale(App.Scale) + 120.Scale(App.Scale),
-            BorderYO + dim1.Y + dim2.Y + 20.Scale(App.Scale));
-        spriteBatch.DrawStringOffset(Font, linesString, Color.White, pos, scale: 0.75F.Scale(App.Scale));
+        var pos = new Vector2(tx + 10, BorderYO);
+        spriteBatch.DrawStringOffset(Font, scoreString, Color.White, pos.Scale(App.Scale), scale: 0.75F.Scale(App.Scale));
+        pos = new Vector2(tx + 10, BorderYO + dim1.Y + 10);
+        spriteBatch.DrawStringOffset(Font, levelString, Color.White, pos.Scale(App.Scale), scale: 0.75F.Scale(App.Scale));
+        pos = new Vector2(tx + 10, BorderYO + dim1.Y + dim2.Y + 20);
+        spriteBatch.DrawStringOffset(Font, linesString, Color.White, pos.Scale(App.Scale), scale: 0.75F.Scale(App.Scale));
     }
 
     protected override void DrawBackground(SpriteBatch spriteBatch)

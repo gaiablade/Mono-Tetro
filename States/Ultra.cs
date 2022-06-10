@@ -17,7 +17,7 @@ public class Ultra : SinglePlayerGameMode
     public Ultra(GraphicsDevice @GraphicsDevice)
         : base(new SinglePlayerGameConfig 
         {
-            BackgroundTextureFilename = Resource.BG01,
+            BackgroundTextureFilename = Resource.BG05,
             FontFilename = Resource.FT01,
             GameConfig = App.GameConfig,
             GraphicsDevice = GraphicsDevice,
@@ -26,7 +26,7 @@ public class Ultra : SinglePlayerGameMode
     {
         GameTimer = new Timer(new GameTime().TotalGameTime.TotalMilliseconds);
         var dim = Font.MeasureStringScaled($"Time Left: {timeString}", 0.75F);
-        StatsWidth = (int)(dim.X + 50).Scale(App.Scale);
+        StatsWidth = (int)(dim.X + 50);
     }
 
     public override ChangeState GetChangeState() => ChangeState.NoChange;
@@ -39,24 +39,24 @@ public class Ultra : SinglePlayerGameMode
         var timeLeftString = $"Time Left: {timeString}";
         var linesString = $"Lines: {linesCleared} / 150";
 
-        var dim1 = Font.MeasureStringScaled(scoreString, 0.75F.Scale(App.Scale));
-        var dim2 = Font.MeasureStringScaled(timeLeftString, 0.75F.Scale(App.Scale));
-        var dim3 = Font.MeasureStringScaled(linesString, 0.75F.Scale(App.Scale));
+        var dim1 = Font.MeasureStringScaled(scoreString, 0.75F);
+        var dim2 = Font.MeasureStringScaled(timeLeftString, 0.75F);
+        var dim3 = Font.MeasureStringScaled(linesString, 0.75F);
 
-        spriteBatch.Draw(texture,
-            new Rectangle(BorderXO + Border.Width.Scale(App.Scale) + 110.Scale(App.Scale),
-            BorderYO - 10.Scale(App.Scale),
-            StatsWidth, (int)(dim1.Y + dim2.Y + dim3.Y + 50.Scale(App.Scale))),
-            Color.Black * 0.75F);
+        spriteBatch.DrawScaled(texture,
+            new Rectangle(BorderXO + Border.Width + 110,
+            BorderYO,
+            StatsWidth, (int)(dim1.Y + dim2.Y + dim3.Y + 50)),
+            Color.Black * 0.75F, App.Scale);
 
-        var pos = new Vector2(BorderXO + Border.Width.Scale(App.Scale) + 120.Scale(App.Scale), BorderYO);
-        spriteBatch.DrawStringOffset(Font, scoreString, Color.White, pos, scale: 0.75F.Scale(App.Scale));
-        pos = new Vector2(BorderXO + Border.Width.Scale(App.Scale) + 120.Scale(App.Scale),
-            BorderYO + dim1.Y + 10.Scale(App.Scale));
-        spriteBatch.DrawStringOffset(Font, timeLeftString, Color.White, pos, scale: 0.75F.Scale(App.Scale));
-        pos = new Vector2(BorderXO + Border.Width.Scale(App.Scale) + 120.Scale(App.Scale),
-            BorderYO + dim1.Y + dim2.Y + 20.Scale(App.Scale));
-        spriteBatch.DrawStringOffset(Font, linesString, Color.White, pos, scale: 0.75F.Scale(App.Scale));
+        var pos = new Vector2(BorderXO + Border.Width + 120, BorderYO);
+        spriteBatch.DrawStringOffset(Font, scoreString, Color.White, pos.Scale(App.Scale), scale: 0.75F.Scale(App.Scale));
+
+        pos = new Vector2(BorderXO + Border.Width + 120, BorderYO + dim1.Y + 10);
+        spriteBatch.DrawStringOffset(Font, timeLeftString, Color.White, pos.Scale(App.Scale), scale: 0.75F.Scale(App.Scale));
+
+        pos = new Vector2(BorderXO + Border.Width + 120, BorderYO + dim1.Y + dim2.Y + 20);
+        spriteBatch.DrawStringOffset(Font, linesString, Color.White, pos.Scale(App.Scale), scale: 0.75F.Scale(App.Scale));
     }
 
     protected override bool IsGameFailed()
