@@ -225,8 +225,12 @@ public abstract class SinglePlayerGameMode : UserInputState
 
     protected DrawableTexture DrawNextPiecesGridToDrawable(GraphicsDevice graphicsDevice)
     {
+        /*
         int w = Dimensions.TileWidth * 3;
         int h = (Dimensions.TileHeight * 3) * 5;
+        */
+        int h = Grid.Height;
+        int w = (int)(Dimensions.TileWidth * 4.5);
         return new DrawableTexture(GraphicsDevice, w + 10, h + 10, (sb) => 
         {
             sb.Draw(texture, new Rectangle(0, 0, w + 10, h + 10), Color.Black * 0.8F);
@@ -296,14 +300,17 @@ public abstract class SinglePlayerGameMode : UserInputState
             new Rectangle(gx.Scale(App.Scale), gy.Scale(App.Scale), NextPiecesCell.Width.Scale(App.Scale), NextPiecesCell.Height.Scale(App.Scale)),
             Color.White);
 
-        var pad = 5;
+        var ch = Grid.Height / MinimumBagCapacity;
+        var basisTexture = Tetromino.TetrominoTextures[TetrominoType.I];
+        var scale = ch / basisTexture.Height;
+
         for (int i = 0; i < MinimumBagCapacity; i++)
         {
             var type = Bag.NextPieces.ToArray()[i];
             var texture = Tetromino.TetrominoTextures[type];
 
-            var pw = texture.Width.Scale(0.68F);
-            var ph = texture.Height.Scale(0.68F);
+            var pw = texture.Width.Scale(scale);
+            var ph = texture.Height.Scale(scale);
             var h = (NextPiecesCell.Height - 10) / 5;
             var px = BorderXO + Border.Width + 5 + (NextPiecesCell.Width - 10) / 2 - pw / 2;
             var py = BorderYO + 10 + h * i;
@@ -439,17 +446,17 @@ public abstract class SinglePlayerGameMode : UserInputState
                 {
                     var colorTexture = Tetromino.ColorTextures[Field.tiles[y, x].color];
                     var color = Tetromino.Colors[Field.tiles[y, x].color];
-                    spriteBatch.DrawScaled(colorTexture, 
-                        new Rectangle(GridXO + Dimensions.TileWidth * x, 
-                            GridYO + Dimensions.TileHeight * y, 
-                            Dimensions.TileWidth + 1, 
-                            Dimensions.TileHeight + 1), 
-                        Color.White, App.Scale);
+                    spriteBatch.DrawScaled(Tetromino.TileTexture,
+                        new Rectangle(GridXO + Dimensions.TileWidth * x,
+                        GridYO + Dimensions.TileHeight * y,
+                        Dimensions.TileWidth,
+                        Dimensions.TileHeight),
+                        color, App.Scale);
                 }
             }
         }
 
-        if (bannerSW.GetElapsedMilliseconds(gameTime) < BannerTime)
+        if (App.GameConfig.ShowBanners && bannerSW.GetElapsedMilliseconds(gameTime) < BannerTime)
         {
             var strDim = Font.MeasureStringScaled(bannerMsg, 1F);
             spriteBatch.DrawStringOffset(Font, bannerMsg, Color.White,
@@ -860,7 +867,7 @@ public abstract class SinglePlayerGameMode : UserInputState
                 if (!currentMino.WillCollide(XOffset: (int)offset.X, YOffset: (int)-offset.Y, ROffset: 1, Field))
                 {
                     rMoveAnim.FromX = (float)Math.PI / 2 * currentMino.Rotation;
-                    currentMino.Rotation++;
+                    currentMino.Rotation = currentMino.Rotation + 1;
                     rMoveAnim.ToX = (float)Math.PI / 2 * currentMino.Rotation;
                     rMoveAnim.Restart(gameTime);
 

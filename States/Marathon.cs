@@ -3,6 +3,11 @@ using Microsoft.Xna.Framework.Graphics;
 using BinksFarm.Constants;
 using BinksFarm.Enums;
 using MonoCustoms;
+using System;
+using BinksFarm.Classes;
+using System.IO;
+using System.Text;
+using System.Text.Json;
 
 namespace BinksFarm.States;
 
@@ -27,7 +32,8 @@ public class Marathon : SinglePlayerGameMode
 
     protected override bool IsGameFinished()
     {
-        return linesCleared > 149;
+        //return linesCleared > 149;
+        return linesCleared > 1;
     }
 
     protected override void DrawStats(SpriteBatch spriteBatch)
@@ -76,6 +82,25 @@ public class Marathon : SinglePlayerGameMode
 
     protected override void OnGameFinished()
     {
+        // save score
+        MarathonLeaderboard leaderboard = null;
+        try
+        {
+            var base64 = File.ReadAllText(Filepaths.MarathonLeaderboard);
+            var json = Encoding.ASCII.GetString(Convert.FromBase64String(base64));
+            leaderboard = JsonSerializer.Deserialize<MarathonLeaderboard>(json);
+        }
+        catch (Exception)
+        {
+            leaderboard = new MarathonLeaderboard(5);
+        }
+
+        leaderboard.Add(new MarathonScore 
+        { 
+            Score = score 
+        });
+
+        leaderboard.Save(Filepaths.MarathonLeaderboard);
     }
 
     protected override void OnGameOver()

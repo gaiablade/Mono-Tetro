@@ -20,10 +20,12 @@ public class Configuration
     public int ARR { get; set; } = 3;
     public bool IsFullscreen { get; set; } = false;
     public int BackgroundDim { get; set; } = 0;
+    public bool ShowBanners { get; set; } = true;
 
     public void TogglePixelMovement() => UsePixelMovement = !UsePixelMovement;
     public void TogglePixelRotation() => UsePixelRotation = !UsePixelRotation;
     public void ToggleFullscreen() => IsFullscreen = !IsFullscreen;
+    public void ToggleShowBanners() => ShowBanners = !ShowBanners;
     public void IncrementBackgroundDim() => BackgroundDim = (BackgroundDim + 10).ClampLoop(0, 100);
     public void DecrementBackgroundDim() => BackgroundDim = (BackgroundDim - 10).ClampLoop(0, 100);
 

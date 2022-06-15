@@ -139,6 +139,14 @@ public class OptionsMenu : UserInputState
             Decrement = App.GameConfig.DecrementBackgroundDim
         });
 
+        GameOptionsMenu.Add(new Option
+        {
+            PropertyName = OptionsMenuStrings.ShowBannersProperty,
+            Value = () => App.GameConfig.ShowBanners.ToString(),
+            Increment = App.GameConfig.ToggleShowBanners,
+            Decrement = App.GameConfig.ToggleShowBanners
+        });
+
         KeyBindingsMenu = new List<Option>();
 
         KeyBindingsMenu.Add(new Option
@@ -519,25 +527,25 @@ public class OptionsMenu : UserInputState
                 {
                     switch (pointerPos)
                     {
-                        case 7:
+                        case 9:
                             App.GameConfig.KeyBindings[BindKeys.LeftMove] = key;
                             break;
-                        case 8:
+                        case 10:
                             App.GameConfig.KeyBindings[BindKeys.RightMove] = key;
                             break;
-                        case 9:
+                        case 11:
                             App.GameConfig.KeyBindings[BindKeys.DownMove] = key;
                             break;
-                        case 10:
+                        case 12:
                             App.GameConfig.KeyBindings[BindKeys.HardDrop] = key;
                             break;
-                        case 11:
+                        case 13:
                             App.GameConfig.KeyBindings[BindKeys.Hold] = key;
                             break;
-                        case 12:
+                        case 14:
                             App.GameConfig.KeyBindings[BindKeys.RotateClockwise] = key;
                             break;
-                        case 13:
+                        case 15:
                             App.GameConfig.KeyBindings[BindKeys.RotateCounterClockwise] = key;
                             break;
                     }

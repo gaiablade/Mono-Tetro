@@ -12,6 +12,7 @@ public class OptionsMenuStrings
     public const string ResolutionProperty = "Resolution";
     public const string FullscreenProperty = "Fullscreen";
     public const string BackgroundDimProperty = "Background Dim";
+    public const string ShowBannersProperty = "Show Banners";
 
     public const string PresetProperty = "Preset";
     public const string LeftBinding = "Left";

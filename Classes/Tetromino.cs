@@ -11,6 +11,7 @@ namespace BinksFarm.Classes;
 
 public class Tetromino
 {
+    #region Statics
     public static Dictionary<TetrominoType, TetrominoLayout> Layouts = new Dictionary<TetrominoType, TetrominoLayout>
     {
         [TetrominoType.O] = new TetrominoLayout(
@@ -272,6 +273,10 @@ public class Tetromino
                 }
             }
         };
+    public static Texture2D TileTexture;
+    #endregion
+
+    public bool IsTSpinned { get; set; } = false;
 
     public static void InitializeColorTextures(GraphicsDevice graphics)
     {
@@ -293,8 +298,10 @@ public class Tetromino
 
     public static void InitializeTetrominoTextures(GraphicsDevice graphics)
     {
+        TileTexture = LogManager.Load<Texture2D>(Resource.TL01, App.contentManager);
         var TileWidth = Dimensions.TileWidth;
         var TileHeight = Dimensions.TileHeight;
+        var texture = LogManager.Load<Texture2D>(Resource.TL01, App.contentManager);
         TetrominoTextures = new Dictionary<TetrominoType, DrawableTexture>();
         for (int i = 0; i < Enum.GetValues(typeof(TetrominoType)).Length; i++)
         {
@@ -302,6 +309,7 @@ public class Tetromino
             var tLayout = Layouts[type];
             var layout = tLayout.layout;
             var colorTexture = ColorTextures[tLayout.color];
+            var color = Colors[Layouts[type].color];
             var width = TileWidth * layout.GetLength(1);
             var height = TileHeight * layout.GetLength(0);
             var tileWidth = TileWidth;
@@ -316,7 +324,8 @@ public class Tetromino
                         if (layout[y, x] == 1)
                         {
                             var rect = new Rectangle(x * tileWidth, y * tileHeight, tileWidth, tileHeight);
-                            sb.Draw(colorTexture, rect, Color.White);                                
+                            //sb.Draw(colorTexture, rect, Color.White);                                
+                            sb.Draw(TileTexture, rect, color);
                         }
                     }
                 }
@@ -357,6 +366,11 @@ public class Tetromino
             default:
                 break;
         }
+    }
+
+    public void SetPositionAndRotation(int x, int y, int rotation)
+    {
+
     }
 
     public bool WillCollide(int XOffset, int YOffset, int ROffset, Field field)
